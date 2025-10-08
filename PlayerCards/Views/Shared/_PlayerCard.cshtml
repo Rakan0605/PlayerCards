@@ -1,0 +1,35 @@
+﻿@model PlayerCards.Models.PlayerCard
+
+<div class="player-card">
+    @if (!string.IsNullOrEmpty(Model.ImagePath))
+    {
+        <img src="@Model.ImagePath" alt="@Model.Name" />
+    }
+    <h3>@Model.Name</h3>
+    <p>@Model.Description</p>
+    <p><strong>Price:</strong> @Model.Price JD</p>
+
+    <a asp-action="Create" asp-route-id="@Model.Id"><button>Edit</button></a>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit">Delete</button>
+        @Html.AntiForgeryToken()
+    </form>
+    
+    <form asp-action="Love" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" style="@(Model.Isliked ? "background-color:#ff6b6b;" : "")">
+            @(Model.Isliked ? "Unlike 💔" : "Like ❤️")
+            @Html.AntiForgeryToken()
+        </button>
+    </form>
+
+    <form asp-action="AddToCart" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" style="@(Model.IsInCart ? "background-color:#4CAF50;" : "")">
+            @(Model.IsInCart ? "In Cart ✅" : "Add to Cart 🛒")
+            @Html.AntiForgeryToken()
+        </button>
+    </form>
+</div>

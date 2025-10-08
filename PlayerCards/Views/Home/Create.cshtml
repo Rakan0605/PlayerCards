@@ -1,0 +1,102 @@
+﻿@model PlayerCards.Models.PlayerCard
+
+@{
+    ViewData["Title"] = "Create or Edit Player";
+}
+
+<style>
+    body {
+        background-color: white;
+        color: white;
+    }
+
+    .form-container {
+        background-color: #7494ec;
+        padding: 30px;
+        border-radius: 15px;
+        width: 400px;
+        margin: 60px auto;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        text-align: center;
+    }
+
+    input[type="text"], textarea, input[type="file"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: none;
+        background-color: white;
+        color: black;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background-color: white;
+        color: #7494ec;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+    }
+
+        button:hover {
+            background-color: #007BFF;
+        }
+
+    .upload-container {
+        display: flex;
+        justify-content: center; 
+        align-items: center; 
+        height: 100px; 
+
+    }
+
+    .price-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+        .price-container label {
+            color: black;
+            white-space: nowrap;
+        }
+
+        .price-container input[type="number"] {
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            margin-left: 10px;
+            background-color: white;
+            color: black;
+        }
+
+
+</style>
+
+<div class="form-container">
+    <h2 style="text-align: center;">Create Your Player's Card</h2>
+
+    <form asp-action="Create" asp-controller="HomeController" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <input type="text" name="Name" value="@Model.Name" placeholder="Enter the name of the player" required />
+        <textarea name="Description" placeholder="Add the player's description" required>@Model.Description</textarea>
+
+        <div class="upload-container">
+            <input type="file" name="imageFile" accept="image/*" />
+        </div>
+
+        <div class="price-container">
+            <label for="price" style="margin-right: 10px;">Enter your price:</label>
+            <input type="number" name="price" value="@Model.Price" />
+        </div>
+
+
+        <button type="submit">Save</button>
+    </form>
+
+</div>
