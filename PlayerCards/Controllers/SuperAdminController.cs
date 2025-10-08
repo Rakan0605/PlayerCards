@@ -286,38 +286,38 @@ public class SuperAdminController : Controller
     }
 
 
-    [HttpPost]
-    public async Task<IActionResult> CreateAnnouncement(string Title, string Content, List<int> UserIds)
-    {
-        if (string.IsNullOrEmpty(Title) || string.IsNullOrEmpty(Content) || UserIds == null || UserIds.Count == 0)
+        [HttpPost]
+        public async Task<IActionResult> CreateAnnouncement(string Title, string Content, List<int> UserIds)
         {
-            TempData["Error"] = "Please fill in all fields.";
+            if (string.IsNullOrEmpty(Title) || string.IsNullOrEmpty(Content) || UserIds == null || UserIds.Count == 0)
+            {
+                TempData["Error"] = "Please fill in all fields.";
+                return RedirectToAction("Dashboard");
+            }
+
+            var announcement = new Announcement
+            {
+                Title = Title,
+                Content = Content
+            };
+            _context.Announcements.Add(announcement);
+            await _context.SaveChangesAsync();
+
+            foreach (var userId in UserIds)
+            {
+                var userAnnouncement = new UserAnnouncement
+                {
+                    UserAccountId = userId,
+                    AnnouncementId = announcement.Id
+                };
+                _context.UserAnnouncements.Add(userAnnouncement);
+            }
+
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Announcement sent successfully!";
             return RedirectToAction("Dashboard");
         }
-
-        var announcement = new Announcement
-        {
-            Title = Title,
-            Content = Content
-        };
-        _context.Announcements.Add(announcement);
-        await _context.SaveChangesAsync();
-
-        foreach (var userId in UserIds)
-        {
-            var userAnnouncement = new UserAnnouncement
-            {
-                UserAccountId = userId,
-                AnnouncementId = announcement.Id
-            };
-            _context.UserAnnouncements.Add(userAnnouncement);
-        }
-
-        await _context.SaveChangesAsync();
-
-        TempData["Success"] = "Announcement sent successfully!";
-        return RedirectToAction("Dashboard");
-    }
 
 
 

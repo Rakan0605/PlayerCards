@@ -347,7 +347,7 @@
 
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-secondary px-3 py-1 rounded-3 shadow-sm" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary px-3 py-1 rounded-3 shadow-sm">
+                    <button type="button" class="btn btn-primary px-3 py-1 rounded-3 shadow-sm" id="submitAnnouncement">
                         <i class="bi bi-send-fill me-1"></i> Send
                     </button>
                 </div>
@@ -359,9 +359,21 @@
 <!-- CKEditor -->
 <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
 <script>
+    let editorInstance;
     ClassicEditor
         .create(document.querySelector('#announcementContent'))
+        .then(editor => { editorInstance = editor; })
         .catch(error => console.error(error));
+
+    document.getElementById('submitAnnouncement').addEventListener('click', function () {
+        const form = this.closest('form');
+
+        // Update CKEditor content to textarea
+        if (editorInstance) editorInstance.updateSourceElement();
+
+        // Submit the form
+        form.submit();
+    });
 </script>
 
 
