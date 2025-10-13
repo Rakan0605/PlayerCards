@@ -6,97 +6,170 @@
 
 <style>
     body {
-        background-color: white;
-        color: white;
+        background-color: #f4f4f6;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        margin: 0;
+        padding: 0;
     }
 
     .form-container {
-        background-color: #7494ec;
-        padding: 30px;
-        border-radius: 15px;
-        width: 400px;
-        margin: 60px auto;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        text-align: center;
+        background-color: #ffffff;
+        padding: 40px 35px;
+        border-radius: 16px;
+        width: 420px;
+        margin: 80px auto;
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
     }
 
-    input[type="text"], textarea, input[type="file"] {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border-radius: 8px;
-        border: none;
-        background-color: white;
-        color: black;
-    }
-
-    button {
-        width: 100%;
-        padding: 12px;
-        background-color: white;
-        color: #7494ec;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-    }
-
-        button:hover {
-            background-color: #007BFF;
+        .form-container:hover {
+            box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
         }
 
-    .upload-container {
-        display: flex;
-        justify-content: center; 
-        align-items: center; 
-        height: 100px; 
+        .form-container h2 {
+            color: #222;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
 
+    input[type="text"], textarea, input[type="number"] {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+        color: #333;
+        font-size: 15px;
+        transition: border 0.3s ease, background-color 0.3s ease;
+    }
+
+        input[type="text"]:focus, textarea:focus, input[type="number"]:focus {
+            border-color: #7494ec;
+            background-color: #fff;
+            outline: none;
+        }
+
+    textarea {
+        resize: none;
+        height: 100px;
+    }
+
+    /* Custom file upload (full width) */
+    .upload-container {
+        width: 100%;
+        border: 2px dashed #ccc;
+        border-radius: 10px;
+        background-color: #fafafa;
+        text-align: center;
+        cursor: pointer;
+        color: #666;
+        font-weight: 500;
+        transition: border-color 0.3s ease, background-color 0.3s ease;
+        margin-bottom: 20px;
+        padding: 25px 0;
+        display: block;
+        box-sizing: border-box;
+    }
+
+        .upload-container:hover {
+            border-color: #7494ec;
+            background-color: #f1f4fe;
+            color: #333;
+        }
+
+        .upload-container input[type="file"] {
+            display: none;
+        }
+
+    .upload-text {
+        margin: 0;
+        font-size: 15px;
+    }
+
+    .file-name {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #555;
+        text-align: center;
     }
 
     .price-container {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
 
         .price-container label {
-            color: black;
+            font-weight: 500;
+            color: #444;
+            margin-right: 10px;
             white-space: nowrap;
         }
 
         .price-container input[type="number"] {
             flex-grow: 1;
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            margin-left: 10px;
-            background-color: white;
-            color: black;
         }
 
+    button {
+        width: 100%;
+        padding: 14px;
+        background-color: #7494ec;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
 
+        button:hover {
+            background-color: #5a7be3;
+            transform: translateY(-2px);
+        }
 </style>
 
 <div class="form-container">
-    <h2 style="text-align: center;">Create Your Player's Card</h2>
+    <h2>Create or Edit Player Card</h2>
 
     <form asp-action="Create" asp-controller="HomeController" method="post" enctype="multipart/form-data">
         <input type="hidden" name="Id" value="@Model.Id" />
-        <input type="text" name="Name" value="@Model.Name" placeholder="Enter the name of the player" required />
-        <textarea name="Description" placeholder="Add the player's description" required>@Model.Description</textarea>
 
-        <div class="upload-container">
-            <input type="file" name="imageFile" accept="image/*" />
-        </div>
+        <input type="text" name="Name" value="@Model.Name" placeholder="Enter player name" required />
+        <textarea name="Description" placeholder="Enter player description" required>@Model.Description</textarea>
+
+        <!-- Full-width custom upload -->
+        <label class="upload-container" for="imageFile">
+            <p class="upload-text">Click to upload an image</p>
+            <input type="file" id="imageFile" name="imageFile" accept="image/*" />
+        </label>
+        <p id="fileName" class="file-name"></p>
 
         <div class="price-container">
-            <label for="price" style="margin-right: 10px;">Enter your price:</label>
-            <input type="number" name="price" value="@Model.Price" />
+            <label for="price">Price:</label>
+            <input type="number" name="price" value="@Model.Price" placeholder="Enter price" />
         </div>
 
-
-        <button type="submit">Save</button>
+        <button type="submit">Save Player</button>
     </form>
-
 </div>
+
+<script>
+    // Show file name when selected
+    const fileInput = document.getElementById('imageFile');
+    const fileNameDisplay = document.getElementById('fileName');
+
+    fileInput.addEventListener('change', function () {
+        if (this.files && this.files.length > 0) {
+            fileNameDisplay.textContent = `Selected: ${this.files[0].name}`;
+        } else {
+            fileNameDisplay.textContent = '';
+        }
+    });
+</script>
